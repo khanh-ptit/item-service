@@ -12,7 +12,10 @@ jobs:
     steps:
       - name: Deploy to AWS EC2
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          ENV_FILE_CONTENT: ${{ secrets.ENV_FILE_CONTENT }}
         with:
+          envs: ENV_FILE_CONTENT
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_SSH_KEY }}
@@ -30,6 +33,9 @@ jobs:
               git reset --hard origin/main
               git pull origin main
             fi
+
+            # Tạo file .env chứa các thông tin thật từ Github Secrets
+            echo "$ENV_FILE_CONTENT" > .env
 
             # Dựng ứng dụng bằng Docker Compose (đã dùng file chuẩn Prod)
             docker compose up -d --build
