@@ -1,0 +1,38 @@
+name: Deploy Item Service to AWS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to AWS EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            set -e # BẮT BUỘC: Dừng ngay lập tức nếu có bất kỳ lệnh nào bị lỗi
+
+            mkdir -p ~/projects/item-service
+            cd ~/projects/item-service
+
+            # Kéo code mới nhất từ nhánh main (Dành cho Repo Public)
+            if [ ! -d ".git" ]; then
+              git clone https://github.com/khanh-ptit/item-service.git .
+            else
+              git fetch --all
+              git reset --hard origin/main
+              git pull origin main
+            fi
+
+            # Dựng ứng dụng bằng Docker Compose (đã dùng file chuẩn Prod)
+            docker compose up -d --build
+
+            # Xóa các image cũ lủng lẳng để giải phóng bộ nhớ
+            docker image prune -f

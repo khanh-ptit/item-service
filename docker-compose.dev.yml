@@ -1,0 +1,21 @@
+services:
+  item-service:
+    image: pirelli-item-service:latest
+    container_name: item-service
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      mesx-net:
+        ipv4_address: ${ITEM_SERVICE_IP}
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: npm run start:dev
+
+networks:
+  mesx-net:
+    name: ${MESX_NET_NAME}
+    external: true
