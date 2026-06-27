@@ -42,7 +42,7 @@ export class DatabaseModule implements OnModuleInit {
               entities: databaseEntities,
               synchronize: configService.get<boolean>('database.synchronize'),
               logging: configService.get<boolean>('database.logging'),
-              migrations: [__dirname + '/migration/*{.ts,.js}'],
+              migrations: [__dirname + '/migrations/*{.ts,.js}'],
               migrationsRun: true,
             };
           },
