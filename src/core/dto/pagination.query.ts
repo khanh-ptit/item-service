@@ -20,7 +20,7 @@ export class Sort {
   @IsString()
   @IsNotEmpty()
   @IsEnum(EnumSort)
-  order: any;
+  order: EnumSort;
 }
 
 export class Filter {

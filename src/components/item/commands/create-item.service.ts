@@ -14,7 +14,6 @@ export class CreateItemService {
     await this.createItemValidator.validate(request);
 
     const item = this.itemRepository.createEntity(request);
-    console.log('🚀 [LOGGER] ~ item:', item);
     return await this.itemRepository.create(item);
   }
 }

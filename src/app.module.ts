@@ -17,6 +17,8 @@ import {
 } from 'nestjs-i18n';
 import * as path from 'path';
 import { KongGatewayModule } from './core/components/kong-gateway/kong-gateway.module';
+import { NatsClientModule } from './core/components/transporter/nats-transporter/nats-client.module';
+import { UserModule } from './components/user-service/user.module';
 
 @Module({
   imports: [
@@ -43,6 +45,8 @@ import { KongGatewayModule } from './core/components/kong-gateway/kong-gateway.m
     ServiceModule.forRootAsync({ inject: [BOOT, CONSUL] }),
     DatabaseModule.forRoot(),
     KongGatewayModule.forRootAsync(),
+    NatsClientModule,
+    UserModule,
     ItemModule,
   ],
   controllers: [AppController],
